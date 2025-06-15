@@ -1,23 +1,10 @@
-from pydantic import BaseModel, Field
 from datetime import datetime
 from typing import Optional, Dict, Any
+
+from pydantic import BaseModel, Field
+from app.models import PyObjectId  # ✅ Reuse the shared ObjectId model
 from bson import ObjectId
 
-class PyObjectId(ObjectId):
-    """Custom ObjectId type for Pydantic"""
-    @classmethod
-    def __get_validators__(cls):
-        yield cls.validate
-
-    @classmethod
-    def validate(cls, v):
-        if not ObjectId.is_valid(v):
-            raise ValueError("Invalid ObjectId")
-        return ObjectId(v)
-
-    @classmethod
-    def __modify_schema__(cls, field_schema):
-        field_schema.update(type="string")
 
 class UsageModel(BaseModel):
     """Usage tracking model for MongoDB"""
@@ -34,10 +21,10 @@ class UsageModel(BaseModel):
     metadata: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Additional metadata")
 
     class Config:
-        allow_population_by_field_name = True
+        populate_by_name = True  # ✅ Replaces allow_population_by_field_name
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
-        schema_extra = {
+        json_schema_extra = {  # ✅ Replaces schema_extra
             "example": {
                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
                 "endpoint": "/moderate",
@@ -52,6 +39,7 @@ class UsageModel(BaseModel):
             }
         }
 
+
 class UsageCreate(BaseModel):
     """Usage creation model"""
     token: str = Field(..., description="Bearer token used for the request")
@@ -63,6 +51,7 @@ class UsageCreate(BaseModel):
     response_status: Optional[int] = Field(None, description="HTTP response status code")
     response_time: Optional[float] = Field(None, description="Response time in milliseconds")
     metadata: Optional[Dict[str, Any]] = Field(default_factory=dict, description="Additional metadata")
+
 
 class UsageResponse(BaseModel):
     """Usage response model"""
@@ -77,6 +66,7 @@ class UsageResponse(BaseModel):
     response_status: Optional[int] = Field(None, description="HTTP response status code")
     response_time: Optional[float] = Field(None, description="Response time in milliseconds")
     metadata: Optional[Dict[str, Any]] = Field(None, description="Additional metadata")
+
 
 class UsageStats(BaseModel):
     """Usage statistics model"""

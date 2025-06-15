@@ -4,7 +4,7 @@ import time
 import logging
 from typing import Optional
 
-from app.services.usage_service import UsageService
+from app.services.usage_services import UsageService
 from app.core.database import get_database
 
 logger = logging.getLogger(__name__)

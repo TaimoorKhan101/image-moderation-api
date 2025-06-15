@@ -1,5 +1,5 @@
 from pydantic_settings import BaseSettings
-from pydantic import BaseSettings
+# from pydantic import BaseSettings
 from typing import List, Optional
 import os
 from dotenv import load_dotenv
@@ -9,17 +9,15 @@ load_dotenv()
 
 class Settings(BaseSettings):
     # API Configuration
-    """
     API_HOST: str = "0.0.0.0"
     API_PORT: int = 7000
     ENVIRONMENT: str = "development"
-    """
+
     # Security
-    """
     SECRET_KEY: str = "your-secret-key-change-this-in-production"
     ALGORITHM: str = "HS256"
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
-    """
+    
     # MongoDB Atlas Configuration
     mongodb_url: str = os.getenv("MONGODB_URL", "mongodb+srv://username:password@cluster.mongodb.net/")
     database_name: str = os.getenv("DATABASE_NAME", "image_moderation")

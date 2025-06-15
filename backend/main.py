@@ -1,4 +1,4 @@
-from app.database import connect_to_mongo, close_mongo_connection
+from backend.app.core.database import connect_to_mongo, close_mongo_connection
 
 @app.on_event("startup")
 async def startup_event():
