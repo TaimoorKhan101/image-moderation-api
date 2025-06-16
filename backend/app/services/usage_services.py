@@ -8,8 +8,9 @@ import logging
 logger = logging.getLogger(__name__)
 
 class UsageService:
-    def __init__(self):
-        self.collection = get_usages_collection()
+    @property
+    def collection(self):
+        return get_usages_collection()
 
     async def log_usage(self, usage: UsageCreate):
         """Log API usage into MongoDB"""

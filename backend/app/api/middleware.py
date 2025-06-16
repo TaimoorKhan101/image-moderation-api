@@ -20,6 +20,7 @@ class UsageTrackingMiddleware(BaseHTTPMiddleware):
         self.usage_service = UsageService()
     
     async def dispatch(self, request: Request, call_next):
+        
         start_time = time.time()
         
         # Extract token from Authorization header
