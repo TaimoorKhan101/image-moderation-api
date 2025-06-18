@@ -38,15 +38,15 @@ class TokenModel(BaseModel):
     created_by: Optional[str] = Field(None, description="Token creator identifier")
 
     class Config:
-        populate_by_name = True  # replaces allow_population_by_field_name
+        populate_by_name = True  # replace allow_population_by_field_name
         arbitrary_types_allowed = True
         json_encoders = {ObjectId: str}
-        json_schema_extra = {  # replaces schema_extra
+        json_schema_extra = {  # replace schema_extra
             "example": {
                 "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
                 "is_admin": False,
-                "created_at": "2024-01-01T00:00:00",
-                "expires_at": "2024-12-31T23:59:59",
+                "created_at": "2025-01-01T00:00:00",
+                "expires_at": "2025-12-31T23:59:59",
                 "is_active": True,
                 "description": "API token for user authentication",
                 "created_by": "admin"
