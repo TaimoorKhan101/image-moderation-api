@@ -34,22 +34,27 @@ async def create_token(
         
         # Create new token
         new_token = await auth_service.create_token(
-            is_admin=token_data.isAdmin,
+            is_admin=token_data.is_admin,
             description=token_data.description
         )
         
         logger.info(f"Admin {current_user['token'][:8]}... created new token")
         
         return TokenResponse(
+            id = str(new_token.get('_id', '')),
             token=new_token["token"],
-            isAdmin=new_token["isAdmin"],
-            createdAt=new_token["createdAt"],
+            is_admin=new_token["isAdmin"],
+            created_at=new_token["createdAt"],
+            expires_at=new_token.get("expiresAt"),
+            is_active=new_token.get("isActive", True),
             description=new_token.get("description")
         )
         
     except CustomException:
         raise
     except Exception as e:
+        import traceback
+        traceback.print_exc()
         logger.error(f"Error creating token: {str(e)}")
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -77,7 +82,7 @@ async def get_all_tokens(
         
         return [
             TokenInfo(
-                token_id=token["_id"],
+                token_id=str(token["_id"]),
                 isAdmin=token["isAdmin"],
                 createdAt=token["createdAt"],
                 description=token.get("description"),

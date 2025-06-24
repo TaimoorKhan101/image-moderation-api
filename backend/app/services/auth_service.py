@@ -17,12 +17,13 @@ class AuthService:
         }
 
         tokens_collection = get_tokens_collection()
-        await tokens_collection.insert_one(token_doc)
+        insert_result = await tokens_collection.insert_one(token_doc)
+        token_doc["_id"] = insert_result.inserted_id
         return token_doc
 
     async def get_all_tokens(self):
         tokens_collection = get_tokens_collection()
-        return await tokens_collection.find({}, {"token": 0}).to_list(length=100)
+        return await tokens_collection.find({}).to_list(length=100)
 
     async def delete_token(self, token: str):
         tokens_collection = get_tokens_collection()
